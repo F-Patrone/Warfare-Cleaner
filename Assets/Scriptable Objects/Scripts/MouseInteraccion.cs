@@ -8,7 +8,8 @@ public class MouseInteraccion : MonoBehaviour
     public LayerMask layerMask;
     public TextMeshProUGUI objName;
     public GameObject target;
-    public Inventario inventory;
+    public InventoryData inventory;
+    public Items item;
 
     void Update()
     {
@@ -21,9 +22,10 @@ public class MouseInteraccion : MonoBehaviour
             {
                 // Si el raycast impacta algo
                 Debug.Log("Impactó en: " + hit.collider.name);
-                Debug.DrawLine(ray.origin, hit.point, Color.red, 2f); // Dibuja una línea temporal para debug
+                Debug.DrawLine(ray.origin, hit.point, Color.red, 1f); // Dibuja una línea temporal para debug
                 objName.text = hit.collider.name;
                 target = hit.collider.gameObject;
+                item = hit.collider.GetComponent<Items>();
             }
             else
             {
@@ -31,18 +33,21 @@ public class MouseInteraccion : MonoBehaviour
                 Debug.Log("No impactó nada.");
                 objName.text = null;
                 target = null;
+                item = null;
             }
             if(Input.GetMouseButtonDown(0))
             {
                 if (target != null)
-                {
-                    inventory.AgregarItem(hit.collider.name, 1, 2f, 1f);
-                    Destroy(target);
+            {
+                inventory.AddItem(item.item, 1);
+                Debug.Log(hit.collider.name + " added to inventory.");
+                Destroy(target);
+
                 }
             }
             if (Input.GetKeyDown(KeyCode.I)) 
             {
-                inventory.MostrarInventario();
+                //inventory.MostrarInventario();
             }
 
     }
