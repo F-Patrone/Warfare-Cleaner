@@ -11,13 +11,13 @@ using UnityEngine;
 public class InventoryData : ScriptableObject, ISerializationCallbackReceiver
 {
     public string savePath;
-    private ItemDatabase database;
+    [SerializeField] private ItemDatabase database;
     public List<InventorySlot> Container = new List<InventorySlot>();
 
     private void OnEnable()
     {
 #if UNITY_EDITOR
-        database = (ItemDatabase)AssetDatabase.LoadAssetAtPath("Assets/Scriptable Objects/Inventorys/Item DataBase.asset", typeof(ItemDatabase));
+        database = (ItemDatabase)AssetDatabase.LoadAssetAtPath("Assets/Resources/Item Database.asset", typeof(ItemDatabase));
 #else
         database = Resources.Load<ItemDatabase>("Item DataBase");
 #endif
@@ -37,6 +37,20 @@ public class InventoryData : ScriptableObject, ISerializationCallbackReceiver
     
     }
 
+    public void RemoveItem(EquipData _item, int _amount)
+    {
+        for (int i = 0; i <= Container.Count; i++)
+        {
+            if (Container[i].item == _item)
+            {
+                Container[i].RemoveAmount(_amount);
+                if (Container[i].amount == 0) Container.Remove(Container[i]);
+                return;
+            }
+        }
+        
+    }
+
     public void Save()
     {
         string saveData = JsonUtility.ToJson(this, true);
@@ -52,7 +66,7 @@ public class InventoryData : ScriptableObject, ISerializationCallbackReceiver
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(string.Concat(Application.persistentDataPath, savePath),FileMode.Open);
-            JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(),this);
+            JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
             file.Close();
         } 
     }
@@ -90,5 +104,8 @@ public class InventorySlot
     {
         amount += value;
     }
-    
+    public void RemoveAmount(int value) 
+    {
+        amount -= value;
+    }
 }

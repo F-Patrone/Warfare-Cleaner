@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c24d459de8982f4594ee5ea2bfeb094, type: 3}
-  m_Name: New Weapon Object
+  m_Name: Bow
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   prefab: {fileID: 3982439369591799732, guid: 810627d0ae208894782a300f20efffbb, type: 3}

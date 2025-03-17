@@ -10,6 +10,10 @@ public class MouseInteraccion : MonoBehaviour
     public GameObject target;
     public InventoryData inventory;
     public Items item;
+    public Weapons weapon;
+    public Armors armor;
+    public Materiales material;
+    public Comerciante merchant;
 
     void Update()
     {
@@ -26,6 +30,11 @@ public class MouseInteraccion : MonoBehaviour
                 objName.text = hit.collider.name;
                 target = hit.collider.gameObject;
                 item = hit.collider.GetComponent<Items>();
+                weapon = hit.collider.GetComponent<Weapons>();
+                armor = hit.collider.GetComponent<Armors>();
+                material = hit.collider.GetComponent<Materiales>();
+
+                
             }
             else
             {
@@ -34,21 +43,37 @@ public class MouseInteraccion : MonoBehaviour
                 objName.text = null;
                 target = null;
                 item = null;
+                weapon = null;
+                armor = null;
+                material = null;
             }
-            if(Input.GetMouseButtonDown(0))
+        if (!merchant.comercioDisponible)
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                if (target != null)
-            {
-                inventory.AddItem(item.item, 1);
+                if (target != null && item != null)
+                {
+                    inventory.AddItem(item.item, 1);
+                }
+                else if (target != null && weapon != null)
+                {
+                    inventory.AddItem(weapon.weapon, 1);
+                }
+                else if (target != null && armor != null)
+                {
+                    inventory.AddItem(armor.armor, 1);
+                }
+                else if (target != null && material != null)
+                {
+                    inventory.AddItem(material.material, 1);
+                }
                 Debug.Log(hit.collider.name + " added to inventory.");
                 Destroy(target);
 
-                }
+
             }
-            if (Input.GetKeyDown(KeyCode.I)) 
-            {
-                //inventory.MostrarInventario();
-            }
+        }
+           
 
     }
 }
